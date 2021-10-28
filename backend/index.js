@@ -33,6 +33,13 @@ app.use(morgan('combined'));
 app.use(version, routes);
 
 // listening to the main port
-app.listen(port, () => {
+const server = app.listen(port, () => {
 	console.log(`API is ready on http://localhost:${port}`);
+});
+
+// handling rejections
+process.on('unhandledRejection', (err, promise) => {
+	console.log(`Error - ${err?.message}`);
+
+	server.close(() => process.exit(1));
 });
