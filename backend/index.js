@@ -1,9 +1,13 @@
+const { version } = require('./constants');
+const routes = require('./routes/routes');
 const express = require('express');
 const app = express();
 
 const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
+
+require('dotenv').config({ path: './config/config.env' });
 
 // mentioning the port for backend
 const port = process.env.PORT || 3001;
@@ -19,11 +23,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // for better logging
-app.use(morgan());
+app.use(morgan('combined'));
 
-app.use('/', (req, res) => {
-	res.json({ message: 'hi there!' });
-});
+// ------------------------ main stuff here ----------------------- //
+
+app.use(version, routes);
 
 // listening to the main port
 app.listen(port, () => {
