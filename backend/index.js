@@ -9,6 +9,9 @@ const morgan = require('morgan');
 
 require('dotenv').config({ path: './config/config.env' });
 
+const connectDB = require('./config/db');
+connectDB();
+
 // mentioning the port for backend
 const port = process.env.PORT || 3001;
 
