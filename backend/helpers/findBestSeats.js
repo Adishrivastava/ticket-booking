@@ -1,5 +1,6 @@
 // find if a element exist in array
 const findElement = (array, element) => {
+	console.log('element ', element);
 	return array.indexOf(element) > -1;
 };
 
@@ -197,28 +198,30 @@ const findBestSeats = (arr, seats) => {
 	}
 
 	console.log('\n \n \n', best_ans, 'ans - ', ans);
+	for (let i = 0; i < 12; i++) {
+		best_ans[i].sort();
+		ans[i].sort();
+	}
+
+	return { new_seatings: best_ans, booked_seats: ans };
 };
 
 module.exports = findBestSeats;
 
-arr = [
-	[1, 2, 3, 4, 5, 7],
-	[1, 2, 3, 4, 7],
-	[1, 2, 3],
-	[1, 2, 3],
-	[],
-	[1, 2, 3, 4, 5, 6, 7],
-	[1, 6, 7],
-	[6, 7],
-	[1, 2, 3, 4, 5, 6, 7],
-	[1, 2, 3, 4, 5, 6, 7],
-	[4, 5, 6, 7],
-	[1, 6, 7],
-	[1, 2],
-];
+// arr = [
+// 	[1, 2, 3, 4, 5, 7],
+// 	[1, 2, 3, 4, 7],
+// 	[1, 2, 3],
+// 	[1, 2, 3],
+// 	[],
+// 	[1, 2, 3, 4, 5, 6, 7],
+// 	[1, 6, 7],
+// 	[6, 7],
+// 	[1, 2, 3, 4, 5, 6, 7],
+// 	[1, 2, 3, 4, 5, 6, 7],
+// 	[4, 5, 6, 7],
+// 	[1, 6, 7],
+// 	[1, 2],
+// ];
 
-// arr = [];
-// for (let i = 0; i < 12; i++) {
-// 	arr.push([]);
-// }
-findBestSeats(arr, 7);
+// findBestSeats(arr, 7);

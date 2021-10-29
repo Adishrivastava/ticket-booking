@@ -1,3 +1,4 @@
+const findBestSeats = require('../helpers/findBestSeats');
 const CoachSchema = require('../models/SeatsModel');
 
 exports.createCoach = async (req, res, next) => {
@@ -33,21 +34,30 @@ exports.checkAvailability = async (req, res, next) => {
 // to book seats of train
 // get -> /api/v1/book_seats
 exports.bookSeats = async (req, res, next) => {
-	const coach = await CoachSchema.findById(req.params.id);
-
-	const seats = req.body.seats;
-
-	if (req.body.seats > coach.total_seats_available) {
-		res.status(401).json({
-			success: false,
-			message: 'Not enough seats available!',
-		});
-	}
-
 	try {
-		const coach = await CoachSchema.findByIdAndUpdate(
+		const coach = await CoachSchema.findById(req.params.id);
+
+		const required_seats = req.body.required_seats;
+
+		if (required_seats > coach.total_seats_available) {
+			res.status(401).json({
+				success: false,
+				message: 'Not enough seats available!',
+			});
+		}
+
+		const { new_seatings, booked_seats } = findBestSeats(
+			coach.booked_seats,
+			required_seats
+		);
+
+		console.log(new_seatings, booked_seats);
+		const new_coach = await CoachSchema.findByIdAndUpdate(
 			req.params.id,
-			req.body,
+			{
+				total_seats_available: coach.total_seats_available - required_seats,
+				booked_seats: new_seatings,
+			},
 			{
 				new: true,
 				runValidators: true,
@@ -56,7 +66,7 @@ exports.bookSeats = async (req, res, next) => {
 
 		res.status(200).json({
 			success: true,
-			data: coach,
+			data: new_coach,
 		});
 	} catch (err) {
 		console.log(err);
